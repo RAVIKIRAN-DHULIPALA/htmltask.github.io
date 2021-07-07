@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Marks Splitter</title>
+</head>
+<body>
+    <div class="field">
+        <input type="number" name="marks" id="marks" placeholder="Marks" aria-placeholder="Marks"/>
+        <button onclick="split()">Split</button>
+    </div>
+    <table border="2" id="myTable">
+        <th>S.No</th>
+        <th>Name</th>
+        <th>Total Marks</th>
+        <th>Obtained marks</th>
+        <th>Assignment(30 marks)</th>
+        <th>Mid(60 marks)</th>
+        <th>Test(10 marks)</th>
+        
+        <tbody>
+            
+        </tbody>
+    </table>
+
+    <script>
+
+        let sno = 1;
+        let marks = [];
+        var content;
+        let assignmentMarks,midMarks,testMarks;
+        let flag = false;
+
+        function randomInteger(min, max) {
+           return (Math.random() * (max - min + 1)) + min;
+        }
+        function splitUp(obtainedMarks){
+            assignmentMarks = randomInteger(1,28.9).toFixed(1);
+            midMarks = randomInteger(20,58.9).toFixed(1);
+            testMarks = randomInteger(3,9).toFixed(1);
+            unEqualSplitter(obtainedMarks);
+        }
+
+        function unEqualSplitter(obtainedMarks){
+            console.log((Number(assignmentMarks)+Number(midMarks)+Number(testMarks)));
+            if((Number(assignmentMarks)+Number(midMarks)+Number(testMarks)) === Number(obtainedMarks)){
+                flag =true;
+            }
+            else{
+                splitUp(obtainedMarks);
+            }
+        }
+
+        function split() {
+            let obtainedMarks  =  document.getElementById("marks").value;
+            if(marks.includes(obtainedMarks)){
+                splitUp(obtainedMarks);
+                
+            }
+            else{
+            marks.push(obtainedMarks);
+            assignmentMarks = (obtainedMarks * 30) /100;
+            midMarks = (obtainedMarks * 60) /100;
+            testMarks = (obtainedMarks * 10) /100;
+        }
+        content = `<tr>
+            <td>${sno}</td>
+            <td>${name}</td>
+            <td>100</td>
+            <td>${obtainedMarks}</td>
+            <td>${assignmentMarks}</td>
+            <td>${midMarks}</td>
+            <td>${testMarks}</td>
+        </tr>`;
+            var tableRef = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+
+            var newRow = tableRef.insertRow(tableRef.rows.length);
+            newRow.innerHTML = content;
+            sno +=1;
+        }
+    </script>
+</body>
+</html>

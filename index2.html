@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Marks Splitter</title>
+</head>
+<body>
+
+    <table border="2" id="myTable" >
+        <th>S.No</th>
+        <th>Name</th>
+        <th>Total Marks</th>
+        <th>Obtained marks</th>
+        <th>Assignment(30 marks)</th>
+        <th>Mid(60 marks)</th>
+        <th>Test(10 marks)</th>
+        <th>Add Row</th>
+        
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td id="ins_1"><input type="text" name="name" id="name_1" onkeydown="if(event.keyCode === 13) fixName(this.id)" placeholder="Student Name"  /></td>
+                <td>100</td>
+                <td id="in_1"><input type="number" name="marks" id="marks_1" placeholder="Marks" aria-placeholder="Marks" onkeyup="split(this.id);"/></td>
+                <td id="assi_1"></td>
+                <td id="mid_1"></td>
+                <td id="test_1"></td>
+            </tr>
+            
+        </tbody>
+    </table>
+
+    <script>
+        
+        let sno = 1;
+        let marks = [];
+        var content;
+        let assignmentMarks,midMarks,testMarks;
+        let flag = false;
+
+        function addingButton(){
+            var x = document.getElementById("myTable").rows.length;
+            if(x>2){
+            var t = document.getElementById("myTable").rows[x-2].deleteCell(7);
+            }
+            var xy = document.getElementById("myTable").rows[x-1];
+            let newCell= xy.insertCell(7);
+            newCell.innerHTML = "<td><button onclick='addrow();'>+</button></td>";
+        }
+        function fixName(clicked){
+            let id  = String(clicked).split("_")[1];
+            let name = document.getElementById(`name_${id}`).value;
+            document.getElementById(`ins_${id}`).innerHTML = name;
+        }
+       function addrow(){
+
+           sno +=1;
+            var myHtmlContent = `
+            <tr>
+                <td>${sno}</td>
+                <td id="ins_${sno}"><input type="text" name="name" id="name_${sno}" onsubmit="fixName(this.id);" placeholder="Student Name" /></td>
+                <td>100</td>
+                <td id="in_${sno}"><input type="number" name="marks" id="marks_${sno}" placeholder="Marks" aria-placeholder="Marks" onkeyup="split(this.id);"/></td>
+                <td id="assi_${sno}"></td>
+                <td id="mid_${sno}"></td>
+                <td id="test_${sno}"></td>
+            </tr>
+            `;
+            var tableRef = document.getElementById('myTable').getElementsByTagName('tbody')[1];
+
+            var newRow = tableRef.insertRow(tableRef.rows.length);
+            newRow.innerHTML = myHtmlContent;
+            addingButton();
+        }
+
+        function randomInteger(min, max) {
+           return (Math.random() * (max - min + 1)) + min;
+        }
+        function splitUp(obtainedMarks){
+            assignmentMarks = randomInteger(1,28.9).toFixed(1);
+            midMarks = randomInteger(20,58.9).toFixed(1);
+            testMarks = randomInteger(3,9).toFixed(1);
+            unEqualSplitter(obtainedMarks);
+        }
+
+        function unEqualSplitter(obtainedMarks){
+            if((Number(assignmentMarks)+Number(midMarks)+Number(testMarks)) === Number(obtainedMarks)){
+                flag =true;
+            }
+            else{
+                splitUp(obtainedMarks);
+            }
+        }
+        
+        function split(clicked) {
+            let id  = String(clicked).split("_")[1];
+            
+            let obtainedMarks = document.getElementById(`marks_${id}`).value;  
+            
+                if(obtainedMarks > 35){
+                if(marks.includes(obtainedMarks)){
+                    splitUp(obtainedMarks);
+                }
+                else{
+                marks.push(obtainedMarks);
+                assignmentMarks = (obtainedMarks * 30) /100;
+                midMarks = (obtainedMarks * 60) /100;
+                testMarks = (obtainedMarks * 10) /100;
+                }
+                document.getElementById(`assi_${id}`).innerHTML = assignmentMarks;
+                document.getElementById(`mid_${id}`).innerHTML = midMarks;
+                document.getElementById(`test_${id}`).innerHTML = testMarks;
+                document.getElementById(`in_${id}`).innerHTML = obtainedMarks;
+                
+            }
+        }
+        
+        addingButton();
+    </script>
+</body>
+</html>
